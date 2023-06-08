@@ -4,6 +4,7 @@ import {ServerCloudBootstrap} from "./bootstrap/server/serverCloud.bootstrap";
 import {ServerFactory} from "./factories/server.factory";
 import {logger} from './logger/tslogger';
 import express from 'express';
+require('dotenv').config()
 
 export var app: express.Application;
 

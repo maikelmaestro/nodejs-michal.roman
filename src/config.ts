@@ -19,7 +19,7 @@ configuration = {
         version: '1.0.0'
     },
     localhost: {
-        mongoDbUri: 'mongodb+srv://dbUser2:QQmrYPk7TTVR6ERK@decisiongrid-staging.o51cp.mongodb.net/Decision?retryWrites=true&w=majority&readPreference=nearest',
+        mongoDbUri: process.env.MONGO_URI || 'mongodb+srv://admin:Qwerty123@cluster0.hqmuck9.mongodb.net/key-storage?retryWrites=true&w=majority',
         mongoDatabase: 'Decision',
 
         landingPageUrl: 'https://decisionrules.io/',

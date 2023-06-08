@@ -13,10 +13,14 @@
   "license": "",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
     "express": "^4.18.0",
     "express-sslify": "1.2.0",
     "helmet": "5.0.2",
-    "mongodb": "4.5.0"
+    "i": "^0.3.7",
+    "mongodb": "4.5.0",
+    "mongoose": "^7.2.2",
+    "npm": "^9.7.1"
   },
   "devDependencies": {
     "@types/node": "17.0.30",
