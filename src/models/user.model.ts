@@ -1,24 +1,15 @@
-import mongoose from 'mongoose'
-import Mongoose from 'mongoose'
+import Joi from 'joi'
 
-export interface IUser extends Mongoose.Document {
-  name: string
-  key: string
-  user: string
-  keyType: string
-  expiration: Date
-}
+export const userAuthSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+})
 
-export interface IUserModel extends Mongoose.Model<IUser> {}
+export const userUpdateSchema = Joi.object({
+  firstname: Joi.string().optional(),
+  surname: Joi.string().optional(),
+})
 
-const Schema = new mongoose.Schema({
-    name: {type: Mongoose.Schema.Types.String},
-    firstname: {type: Mongoose.Schema.Types.String},
-    surname: {type: Mongoose.Schema.Types.String},
-    email: {type: Mongoose.Schema.Types.String}
-  },
-  {timestamps: true},)
 
-const User = mongoose.model('User', Schema)
 
-export default User
+

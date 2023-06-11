@@ -1,10 +1,24 @@
-import mongoose from 'mongoose'
-import {IKey, IKeyModel, KeySchema } from './key.model'
+import {IKey} from './key.model'
+import Joi from 'joi'
 
 export interface IApiKey extends IKey {}
 
-export interface IApiKeyModel extends IKeyModel {}
 
-const ApiKey = mongoose.model('ApiKey', KeySchema)
+export const apiKeyCreateSchema = Joi.object({
+  name: Joi.string().required(),
+  key: Joi.string().required(),
+  user: Joi.string().required(),
+  keyType: Joi.string().required(),
+  expiration: Joi.date().required(),
+})
 
-export default ApiKey
+export const apiKeyUpdateSchema = Joi.object({
+  name: Joi.string().optional(),
+  key: Joi.string().optional(),
+  keyType: Joi.string().optional(),
+  expiration: Joi.date().optional(),
+})
+
+
+
+
