@@ -11,8 +11,6 @@ export class AuthController implements BaseController {
   public router = express.Router()
   path: string = API_VERSION
 
-  private readonly config = ConfigFactory.getConfig()
-
   constructor() {
     this.initRouter()
   }

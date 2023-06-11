@@ -3,8 +3,6 @@ import * as express from 'express'
 import {RequestHandler} from 'express'
 import {ConfigFactory} from '../factories/configFactory'
 import {DBConnections} from '../services/databases/DBConnections'
-import {BaseService} from '../shared/base/base.service'
-import colors from 'colors'
 
 export class DefaultController implements BaseController {
   public router = express.Router()

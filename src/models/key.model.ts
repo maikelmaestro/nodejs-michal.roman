@@ -1,6 +1,5 @@
-import {IBaseItem} from '../app/base/base-item.model'
 
-export interface IKey extends IBaseItem {
+export interface IKey {
   name: string
   key: string
   user: string

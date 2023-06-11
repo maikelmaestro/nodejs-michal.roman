@@ -1,5 +1,4 @@
 import {RequestHandler} from 'express'
-import {DBConnections} from './databases/DBConnections'
 import {Db} from 'mongodb'
 
 export class AuthService {

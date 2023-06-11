@@ -10,6 +10,7 @@ import {DBConnections} from '../../services/databases/DBConnections'
 import {ApiKeyController} from '../../controllers/api-key.controller'
 import {LicenseKeyController} from '../../controllers/license-key.controller'
 import {AuthController} from '../../controllers/auth.controller'
+import {UserController} from '../../controllers/user.controller'
 
 export class ServerBaseBootstrap {
 
@@ -43,7 +44,8 @@ export class ServerBaseBootstrap {
         new DefaultController(),
         new ApiKeyController(),
         new LicenseKeyController(),
-        new AuthController()
+        new AuthController(),
+        new UserController(),
       ]
     )
 
