@@ -3,6 +3,7 @@ class DRLogger {
     constructor() {}
 
     public info = console.log;
+    public success = console.log;
     public warn = console.warn;
     public error = console.error;
     public fatal = console.error;

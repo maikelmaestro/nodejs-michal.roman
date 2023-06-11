@@ -19,7 +19,7 @@ configuration = {
         version: '1.0.0'
     },
     localhost: {
-        mongoDbUri: process.env.MONGO_URI || 'mongodb+srv://admin:Qwerty123@cluster0.hqmuck9.mongodb.net/key-storage?retryWrites=true&w=majority',
+        mongoDbUri:  'mongodb+srv://admin:Qwerty123@cluster0.hqmuck9.mongodb.net/key-storage?retryWrites=true&w=majority',
         mongoDatabase: 'Decision',
 
         landingPageUrl: 'https://decisionrules.io/',

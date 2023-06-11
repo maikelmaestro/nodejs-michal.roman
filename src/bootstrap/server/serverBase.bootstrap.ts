@@ -7,6 +7,9 @@ import {AuditServer} from '../../server/audit.server'
 import express from 'express'
 import {DefaultController} from '../../controllers/default.controller'
 import {DBConnections} from '../../services/databases/DBConnections'
+import {ApiKeyController} from '../../controllers/api-key.controller'
+import {LicenseKeyController} from '../../controllers/license-key.controller'
+import {AuthController} from '../../controllers/auth.controller'
 
 export class ServerBaseBootstrap {
 
@@ -37,7 +40,10 @@ export class ServerBaseBootstrap {
     const port = process.env.PORT || 8080
 
     this.server = new AuditServer(Number.parseInt(port.toString()), [
-        new DefaultController()
+        new DefaultController(),
+        new ApiKeyController(),
+        new LicenseKeyController(),
+        new AuthController()
       ]
     )
 
