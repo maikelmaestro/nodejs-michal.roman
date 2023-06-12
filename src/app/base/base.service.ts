@@ -1,0 +1,72 @@
+import {ObjectId} from 'mongodb'
+import {BaseDa} from './base.da'
+import {IBaseItem} from './base.model'
+import {BaseDto} from './dto/base.dto'
+
+export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
+
+  constructor(protected dataAccess: BaseDa<T, DTO>) {}
+
+  async createOne(payload: DTO): Promise<T> {
+    const body = {...payload}
+    body.createdAt = new Date()
+
+    const {id} = await this.dataAccess.createOne(body)
+    return await this.dataAccess.findOne(id)
+  }
+
+  async find(options: any): Promise<T[]> {
+    return await this.dataAccess.find(options)
+  }
+
+  async findOne(id: string): Promise<T> {
+    const _id: ObjectId = new ObjectId(id)
+
+    if (!_id) {
+      throw new Error(`Invalid id ${_id}`)
+    }
+
+    return await this.dataAccess.findOne(_id)
+  }
+
+  async updateOne(id: string, payload: DTO): Promise<T> {
+    const _id = new ObjectId(id)
+    let foundItem: T
+
+    if (!_id) {
+      throw new Error(`Invalid id ${_id}`)
+    }
+
+    try{
+      foundItem = await this.dataAccess.findOne(_id)
+    } catch (error) {
+      throw new Error(`Unable to find item with id ${_id}`)
+    }
+
+    const body = {...payload}
+    body.updatedAt = new Date()
+    body.createdAt = foundItem.createdAt
+
+    const {updated} = await this.dataAccess.updateOne(_id, body)
+    if (!updated) {
+      throw new Error(`Unable to update item with id ${_id}`)
+    }
+
+    return await this.dataAccess.findOne(_id)
+  }
+
+  async deleteOne(id: string): Promise<{deleted: boolean}> {
+    const _id = new ObjectId(id)
+
+    if (!_id) {
+      throw new Error(`Invalid id ${_id}`)
+    }
+
+    const {deleted} = await this.dataAccess.deleteOne(_id)
+
+    if (!deleted) {
+      throw new Error(`Unable to delete item with id ${_id}`)
+    }
+    return {deleted}
+  }
+}
