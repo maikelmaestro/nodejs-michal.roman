@@ -1,7 +1,6 @@
-import {ObjectId} from 'mongodb'
+import {IBaseItem} from '../base/base.model'
 
-export interface IKey {
-  _id?: ObjectId
+export interface IKey extends IBaseItem {
   name: string
   key: string
   user: string
