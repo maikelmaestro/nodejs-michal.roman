@@ -1,17 +1,19 @@
 import * as express from 'express'
-import {COLLECTION_API_KEY} from '../shared/database.consts'
-import {validateParams, validateRequest} from '../middlewares/validator.middleware'
-import {paramsSchema} from '../shared/query.validator'
-import {API_VERSION} from '../shared/api.consts'
+
 import {Request, Response} from 'express'
 import {ApiKeyService} from './api-key.service'
-import {apiKeyCreateSchema, apiKeyUpdateSchema} from './api-key.model'
-import {IBaseController} from '../controllers/base.controller'
-import {logger} from '../logger/tslogger'
+import {apiKeyCreateSchema, apiKeyUpdateSchema, IApiKey} from './api-key.model'
+import {IBaseController} from '../../controllers/base.controller'
+import {API_VERSION_PATH} from '../../shared/api.consts'
+import {COLLECTION_API_KEY} from '../../shared/database.consts'
+import {validateParams, validateRequest} from '../../middlewares/validator.middleware'
+import {paramsSchema} from '../../shared/query.validator'
+import {logger} from '../../logger/tslogger'
+import {firebaseAuthMiddleware} from '../../middlewares/firebase-auth.middleware'
 
 export class ApiKeyController implements IBaseController {
   public router = express.Router()
-  path: string = API_VERSION
+  path: string = API_VERSION_PATH
   collectionName: string = COLLECTION_API_KEY
   private service: ApiKeyService = new ApiKeyService()
 
@@ -19,7 +21,7 @@ export class ApiKeyController implements IBaseController {
     this.initRouter()
   }
 
-  public call = fn => (req, res, next) => this[fn](req, res, next)
+  private call = fn => (req, res, next) => this[fn](req, res, next)
 
   async initRouter() {
 
@@ -49,7 +51,7 @@ export class ApiKeyController implements IBaseController {
     ], this.call('updateOne'))
   }
 
-  async createOne(req: Request, res: Response): Promise<Response> {
+  async createOne(req: Request, res: Response): Promise<Response<IApiKey>> {
     try {
       const created = await this.service.createOne(req.body)
       return res.json(created)
@@ -59,8 +61,9 @@ export class ApiKeyController implements IBaseController {
     }
   }
 
-  async find(req: Request, res: Response): Promise<Response> {
+  async find(req: Request, res: Response): Promise<Response<IApiKey[]>> {
     try {
+      // TODO: add filter, pagination, limit, sort
       const items = await this.service.find(req.query.filter)
       return res.json(items)
     } catch (error) {
@@ -69,7 +72,7 @@ export class ApiKeyController implements IBaseController {
     }
   }
 
-  async findOne(req: Request, res: Response): Promise<Response> {
+  async findOne(req: Request, res: Response): Promise<Response<IApiKey>> {
     try {
       const item = await this.service.findOne(req.params._id)
       return res.json(item)
@@ -79,9 +82,9 @@ export class ApiKeyController implements IBaseController {
     }
   }
 
-  async updateOne(req: Request, res: Response): Promise<Response> {
+  async updateOne(req: Request, res: Response): Promise<Response<IApiKey>> {
     try {
-      const item = this.service.updateOne(req.params._id, req.body)
+      const item = await this.service.updateOne(req.params._id, req.body)
       return res.json(item)
     } catch (error) {
       logger.errorLog(req, error.message)
