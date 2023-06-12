@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import {BaseController} from "../controllers/base.controller"
+import {IBaseController} from "../controllers/base.controller"
 import {errorHandlerMiddleware} from "../middlewares/errorHandler.middleware"
 import {logger} from '../logger/tslogger'
 
@@ -8,21 +8,23 @@ import {locationMiddleware} from "../middlewares/location.middleware"
 import {serverMiddleware} from "../middlewares/server.middleware"
 import process from "process"
 import colors from 'colors'
+import {firebaseApp} from '../firebase'
 
 const bodyParser = require('body-parser')
-const helmet = require("helmet")
+const helmet = require('helmet')
 const enforce = require('express-sslify')
 
 export class AuditServer {
     public app: express.Application
     public port: number
 
-    constructor(port, controllers: BaseController[]) {
+    constructor(port, controllers: IBaseController[]) {
+
         this.app = express()
         this.app.use(helmet())
         this.app.use(serverMiddleware)
         this.app.use(locationMiddleware)
-
+        firebaseApp()
         if (process.env.FORCE_HTTPS && process.env.FORCE_HTTPS === "true") {
             this.app.use(enforce.HTTPS({trustProtoHeader: true}))
         }
@@ -53,7 +55,7 @@ export class AuditServer {
         })
     }
 
-    private initControllers(controllers: BaseController[]) {
+    private initControllers(controllers: IBaseController[]) {
         controllers.forEach(controller => {
             this.app.use(controller.path, controller.router)
         })
