@@ -6,6 +6,7 @@ export const paramsSchema = Joi.object({
 
 
 const queryParamsSchema = Joi.object({
+  filter: Joi.optional(),
   page: Joi.number().integer().positive().required(),
   limit: Joi.number().integer().positive().max(100),
 })
