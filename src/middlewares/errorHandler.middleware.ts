@@ -1,12 +1,12 @@
-import {HttpException} from "../exceptions/HttpException";
-import express, {NextFunction} from "express";
-import {logger} from "../logger/tslogger";
+import {HttpException} from "../exceptions/HttpException"
+import express, {NextFunction} from "express"
+import {logger} from "../logger/tslogger"
 
 
 export function errorHandlerMiddleware(error: any, request: express.Request, response: express.Response, next: NextFunction) {
-    const message = error.message || 'Something went wrong';
+    const message = error.message || 'Something went wrong'
     if (error instanceof HttpException) {
-        const status = error?.status;
+        const status = error?.status
 
         let payload = {
             error: {
@@ -15,10 +15,10 @@ export function errorHandlerMiddleware(error: any, request: express.Request, res
         }
 
         if(status !== 401) {
-            logger.warn(error);
+            logger.warn(error)
         }
 
-        response.status(status).json(payload).send();
+        response.status(status).json(payload).send()
     } else {
         let payload = {
             error: {
@@ -27,7 +27,7 @@ export function errorHandlerMiddleware(error: any, request: express.Request, res
         }
 
         logger.warn(error);
-        response.status(500).json(payload).send();
+        response.status(500).json(payload).send()
     }
 
 }
