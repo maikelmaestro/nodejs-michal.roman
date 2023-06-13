@@ -1,9 +1,10 @@
 import {Db, ObjectId} from 'mongodb'
 import {DBConnections} from '../../services/databases/DBConnections'
 import {IBaseItem} from './base.model'
+import {HttpException} from '../../exceptions/HttpException'
 
 export class BaseDa<T extends IBaseItem, DTO> {
-  private database: Db
+  protected database: Db
 
   constructor(protected collectionName: string) {
     this.getDB()
@@ -13,16 +14,24 @@ export class BaseDa<T extends IBaseItem, DTO> {
     try {
       return await this.database.collection(this.collectionName).find().toArray() as T[]
     } catch (error) {
-      throw error
+      throw new HttpException(error.status, 'Unable to find items')
     }
   }
 
   async findOne(id: ObjectId): Promise<T> {
+    let found: T
     try {
-      return await this.database.collection(this.collectionName).findOne({_id: id}) as T
+      found = await this.database.collection(this.collectionName).findOne({_id: id}) as T
     } catch (error) {
-      throw error
+      throw new HttpException(error.status, `Unable to find item with id ${id}`)
     }
+
+    if (!found) {
+      console.log('id not found')
+      throw new HttpException(404, `Unable to find item with id ${id}`)
+    }
+
+    return found
   }
 
   async createOne(payload: DTO): Promise<{id: ObjectId}> {
@@ -30,7 +39,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
       const created = await this.database.collection(this.collectionName).insertOne(payload)
       return {id: created.insertedId}
     } catch (error) {
-      throw error
+      throw new HttpException(error.status, 'Unable to create item')
     }
   }
 
@@ -43,7 +52,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
       }
       return {updated: true}
     } catch (error) {
-      throw error
+      throw new HttpException(error.status, `Unable to update item with id ${id}`)
     }
 
   }
@@ -58,7 +67,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
 
       return {deleted: true}
     } catch (error) {
-      throw error
+      throw new HttpException(error.status, `Unable to delete item with id ${id}`)
     }
   }
 

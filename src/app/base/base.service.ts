@@ -1,7 +1,7 @@
 import {ObjectId} from 'mongodb'
 import {BaseDa} from './base.da'
-import {IBaseItem} from './base.model'
-import {BaseDto} from './dto/base.dto'
+import {IBaseItem, BaseDto} from './base.model'
+import {HttpException} from '../../exceptions/HttpException'
 
 export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
 
@@ -23,7 +23,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     const _id: ObjectId = new ObjectId(id)
 
     if (!_id) {
-      throw new Error(`Invalid id ${_id}`)
+      throw new HttpException(404,`Invalid id ${_id}`)
     }
 
     return await this.dataAccess.findOne(_id)
@@ -34,13 +34,13 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     let foundItem: T
 
     if (!_id) {
-      throw new Error(`Invalid id ${_id}`)
+      throw new HttpException(404, `Invalid id ${_id}`)
     }
 
-    try{
+    try {
       foundItem = await this.dataAccess.findOne(_id)
     } catch (error) {
-      throw new Error(`Unable to find item with id ${_id}`)
+      throw new HttpException(404,`Unable to find item with id ${_id}`)
     }
 
     const body = {...payload}
@@ -49,7 +49,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
 
     const {updated} = await this.dataAccess.updateOne(_id, body)
     if (!updated) {
-      throw new Error(`Unable to update item with id ${_id}`)
+      throw new HttpException(400, `Unable to update item with id ${_id}`)
     }
 
     return await this.dataAccess.findOne(_id)
@@ -59,13 +59,13 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     const _id = new ObjectId(id)
 
     if (!_id) {
-      throw new Error(`Invalid id ${_id}`)
+      throw new HttpException(404,`Invalid id ${_id}`)
     }
 
     const {deleted} = await this.dataAccess.deleteOne(_id)
 
     if (!deleted) {
-      throw new Error(`Unable to delete item with id ${_id}`)
+      throw new HttpException(400, `Unable to delete item with id ${_id}`)
     }
     return {deleted}
   }
