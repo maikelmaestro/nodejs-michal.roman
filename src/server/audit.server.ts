@@ -1,6 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import {IBaseController} from "../controllers/base.controller"
 import {errorHandlerMiddleware} from "../middlewares/errorHandler.middleware"
 import {logger} from '../logger/tslogger'
 
@@ -9,6 +8,7 @@ import {serverMiddleware} from "../middlewares/server.middleware"
 import process from "process"
 import colors from 'colors'
 import {firebaseApp} from '../firebase'
+import {IBaseController} from '../app/base/base.controller'
 
 const bodyParser = require('body-parser')
 const helmet = require('helmet')

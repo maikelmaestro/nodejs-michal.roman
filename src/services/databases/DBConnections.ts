@@ -4,7 +4,7 @@ const cluster = require('cluster')
 import {ConfigFactory} from '../../factories/configFactory'
 import {logger} from '../../logger/tslogger'
 import colors from 'colors'
-import {DATABASE_NAME} from '../../shared/database.consts'
+import {DATABASE_NAME} from '../../app/shared/database.consts'
 
 
 export class DBConnections {

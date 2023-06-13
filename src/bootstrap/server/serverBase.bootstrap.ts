@@ -9,6 +9,13 @@ import {DefaultController} from '../../controllers/default.controller'
 import {DBConnections} from '../../services/databases/DBConnections'
 import {ApiKeyController} from '../../app/api-key/api-key.controller'
 import {LicenseKeyController} from '../../app/license-key/license-key.controller'
+import {AuthController} from '../../app/auth/auth.controller'
+import {ApiKeyService} from '../../app/api-key/api-key.service'
+import {LicenseKeyService} from '../../app/license-key/license-key.service'
+import {SessionKeyController} from '../../app/session-key/session-key.controller'
+import {SessionKeyService} from '../../app/session-key/session-key.service'
+import {UserService} from '../../app/user/user.service'
+import {UserController} from '../../app/user/user.controller'
 
 export class ServerBaseBootstrap {
 
@@ -37,11 +44,18 @@ export class ServerBaseBootstrap {
    */
   protected initServer(): express.Application {
     const port = process.env.PORT || 8080
+    const apiKeyService: ApiKeyService = ApiKeyService.getInstance()
+    const licenseKeyService: LicenseKeyService = LicenseKeyService.getInstance()
+    const sessionKeyService: SessionKeyService = SessionKeyService.getInstance()
+    const userService: UserService = UserService.getInstance()
 
     this.server = new AuditServer(Number.parseInt(port.toString()), [
         new DefaultController(),
-        new ApiKeyController(),
-        new LicenseKeyController()
+        new ApiKeyController(apiKeyService),
+        new LicenseKeyController(licenseKeyService),
+        new SessionKeyController(sessionKeyService),
+        new UserController(userService),
+        new AuthController()
       ]
     )
 

@@ -1,10 +1,8 @@
-import {IBaseController} from './base.controller'
 import * as express from 'express'
 import {RequestHandler} from 'express'
 import {ConfigFactory} from '../factories/configFactory'
 import {DBConnections} from '../services/databases/DBConnections'
-import {BaseService} from '../shared/base/base.service'
-import colors from 'colors'
+import {IBaseController} from '../app/base/base.controller'
 
 export class DefaultController implements IBaseController {
   public router = express.Router()

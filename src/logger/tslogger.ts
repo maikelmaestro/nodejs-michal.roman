@@ -1,5 +1,5 @@
-import {checkRouteMethods} from '../utils/checkRouteMethods'
 import colors from 'colors'
+import {checkRouteMethods} from '../app/utils/checkRouteMethods'
 
 class DRLogger {
 
@@ -17,6 +17,7 @@ class DRLogger {
     const {model, method} = checkRouteMethods(req)
     console.log(
       colors.cyan('[INFO]'),
+      this.now,
       'Model:' + colors.cyan(model),
       'Method:' + colors.cyan(method),
       'Body:' + JSON.stringify(req.body))
@@ -27,7 +28,7 @@ class DRLogger {
     console.log(
       colors.green('[SUCCESS]'),
       this.now,
-    'Model:' + colors.green(model),
+      'Model:' + colors.green(model),
       'Method:' + colors.green(method),
       'Body:' + JSON.stringify(req.body))
   }
