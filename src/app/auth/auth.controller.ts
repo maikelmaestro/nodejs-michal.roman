@@ -1,26 +1,54 @@
-import {IBaseController} from './base.controller'
 import * as express from 'express'
-import {userAuthSchema} from '../models/user.model'
-import {validateRequest} from '../middlewares/validator.middleware'
-import {AuthService} from '../services/auth.service'
-import {DBConnections} from '../services/databases/DBConnections'
+
+import {IBaseController} from '../base/base.controller'
+import {validateRequest} from '../../middlewares/validator.middleware'
+import {userAuthSchema} from '../user/user.model'
+import {AuthService} from './auth.service'
+import {Request, Response} from 'express'
+import {logger} from '../../logger/tslogger'
 import {API_VERSION_PATH} from '../shared/api.consts'
+import {IResponse} from '../shared/requests/requests.types'
 
 export class AuthController implements IBaseController {
   public router = express.Router()
   path: string = API_VERSION_PATH
+  private service: AuthService = new AuthService()
 
   constructor() {
     this.initRouter()
   }
 
+  private call = fn => (req, res, next) => this[fn](req, res, next)
+
   async initRouter() {
-    // TODO: Change auth routes
-    const database = await DBConnections.getDatabase()
-    const service = new AuthService(database)
-    this.router.post('/login', [validateRequest(userAuthSchema)], service.login)
-    this.router.post('/sign-up', [validateRequest(userAuthSchema)], service.signUp)
-    this.router.post('/logout', service.logout)
+    this.router.post(`/sign-up`, [
+      validateRequest(userAuthSchema)
+    ], this.call('signUp'))
+
+    this.router.post(`/logout`, [
+    ], this.call('logout'))
+  }
+
+  async signUp(req: Request, res: IResponse) {
+    try {
+      const user = await this.service.signUp(req.body)
+      logger.infoLog(req)
+      return res.json(user)
+    } catch (error) {
+      logger.errorLog(req, error.message)
+      return res.status(error.status || 400).json({ message: error.message})
+    }
+  }
+
+  async logout(req: Request, res: IResponse) {
+    try {
+      const user = await this.service.logout()
+      logger.infoLog(req)
+      return res.json(user)
+    } catch (error) {
+      logger.errorLog(req, error.message)
+      return res.status(error.status || 400).json({ message: error.message})
+    }
   }
 
 }
