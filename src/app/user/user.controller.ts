@@ -1,19 +1,19 @@
 import * as express from 'express'
 
-import {Response} from 'express'
+import {Response, Router} from 'express'
 import {validateParams, validateRequest} from '../../middlewares/validator.middleware'
 import {logger} from '../../logger/tslogger'
 import {firebaseAuthMiddleware} from '../../middlewares/firebase-auth.middleware'
 import {IBaseController} from '../base/base.controller'
-import {API_VERSION_PATH} from '../shared/api.consts'
+import {API_VERSION_PATH, DEFAULT_SORT} from '../shared/api.consts'
 import {COLLECTION_USER} from '../shared/database.consts'
 import {paramsSchema} from '../shared/query.validator'
-import {IRequest, IResponse} from '../shared/requests/requests.types'
+import {IListRequest, IRequest, IResponse} from '../shared/requests/requests.types'
 import {UserService} from './user.service'
 import {IUser, userCreateSchema, userUpdateSchema} from './user.model'
 
 export class UserController implements IBaseController {
-  public router = express.Router()
+  public router: Router = express.Router()
   path: string = API_VERSION_PATH
   collectionName: string = COLLECTION_USER
 
@@ -30,7 +30,7 @@ export class UserController implements IBaseController {
     ], this.call('find'))
 
     this.router.get(`/${this.collectionName}/:_id`, [
-      // firebaseAuthMiddleware,
+      firebaseAuthMiddleware,
       validateParams(paramsSchema)
     ], this.call('findOne'))
 
@@ -40,12 +40,12 @@ export class UserController implements IBaseController {
     ], this.call('createOne'))
 
     this.router.delete(`/${this.collectionName}/:_id`, [
-      // firebaseAuthMiddleware,
+      firebaseAuthMiddleware,
       validateParams(paramsSchema)
     ], this.call('deleteOne'))
 
     this.router.put(`/${this.collectionName}/:_id`, [
-      // firebaseAuthMiddleware,
+      firebaseAuthMiddleware,
       validateParams(paramsSchema),
       validateRequest(userUpdateSchema)
     ], this.call('updateOne'))
@@ -62,10 +62,17 @@ export class UserController implements IBaseController {
     }
   }
 
-  async find(req: IRequest, res: IResponse): Promise<Response<IUser[]>> {
+  async find(req: IListRequest, res: IResponse): Promise<Response<IUser[]>> {
+    let filter: any
+
+    if (req.query.filter?.length) {
+      filter = JSON.parse(decodeURIComponent(req.query.filter))
+    }
+
+    const sort = req.query.sort?.length ? JSON.parse(decodeURIComponent(req.query.sort)) : DEFAULT_SORT
+
     try {
-      // TODO: add filter, pagination, limit, sort and user
-      const items = await this.service.find(req.query.filter)
+      const items = await this.service.find({filter, sort})
       logger.infoLog(req)
       return res.json(items)
     } catch (error) {

@@ -2,7 +2,6 @@ import {BaseDa} from '../base/base.da'
 import {IUser, UserDto} from './user.model'
 import {COLLECTION_USER} from '../shared/database.consts'
 
-
 export class UserDa extends BaseDa<IUser, UserDto> {
   private static instance: UserDa
 

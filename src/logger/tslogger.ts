@@ -19,7 +19,7 @@ class DRLogger {
       colors.cyan('[INFO]'),
       this.now,
       'Model:' + colors.cyan(model),
-      'Method:' + colors.cyan(method),
+      'Method:' + colors.cyan(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
   }
 
@@ -29,7 +29,7 @@ class DRLogger {
       colors.green('[SUCCESS]'),
       this.now,
       'Model:' + colors.green(model),
-      'Method:' + colors.green(method),
+      'Method:' + colors.green(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
   }
 
@@ -39,7 +39,7 @@ class DRLogger {
       colors.yellow('[WARN]'),
       this.now,
       'Model:' + colors.yellow(model),
-      'Method:' + colors.yellow(method),
+      'Method:' + colors.yellow(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
   }
 
@@ -49,7 +49,7 @@ class DRLogger {
       colors.red('[ERROR]'),
       this.now,
       'Model:' + colors.red(model),
-      'Method:' + colors.red(method),
+      'Method:' + colors.red(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body),
       'Message:' + colors.red(message || ''))
   }
@@ -60,7 +60,7 @@ class DRLogger {
       colors.red('[FATAL]'),
       this.now,
       'Model:' + colors.red(model),
-      'Method:' + colors.red(method),
+      'Method:' + colors.red(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
   }
 }

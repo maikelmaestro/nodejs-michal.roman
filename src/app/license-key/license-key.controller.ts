@@ -1,19 +1,19 @@
 import * as express from 'express'
 
-import {Request, Response} from 'express'
+import {Request, Response, Router} from 'express'
 import {validateParams, validateRequest} from '../../middlewares/validator.middleware'
 import {logger} from '../../logger/tslogger'
 import {LicenseKeyService} from './license-key.service'
 import {ILicenseKey, licenseKeyCreateSchema, licenseKeyUpdateSchema} from './license-key.model'
 import {IBaseController} from '../base/base.controller'
-import {API_VERSION_PATH} from '../shared/api.consts'
+import {API_VERSION_PATH, DEFAULT_SORT} from '../shared/api.consts'
 import {COLLECTION_LICENSE_KEY} from '../shared/database.consts'
 import {paramsSchema} from '../shared/query.validator'
-import {IRequest, IResponse} from '../shared/requests/requests.types'
+import {IListRequest, IRequest, IResponse} from '../shared/requests/requests.types'
 import {firebaseAuthMiddleware} from '../../middlewares/firebase-auth.middleware'
 
 export class LicenseKeyController implements IBaseController {
-  public router = express.Router()
+  public router: Router = express.Router()
   path: string = API_VERSION_PATH
   collectionName: string = COLLECTION_LICENSE_KEY
 
@@ -56,7 +56,7 @@ export class LicenseKeyController implements IBaseController {
     body.user = req.user as string || undefined
 
     try {
-      const created = await this.service.createOne(req.body)
+      const created = await this.service.createOne(body)
       logger.infoLog(req)
       return res.json(created)
     } catch (error) {
@@ -65,10 +65,21 @@ export class LicenseKeyController implements IBaseController {
     }
   }
 
-  async find(req: IRequest, res: IResponse): Promise<Response<ILicenseKey[]>> {
+  async find(req: IListRequest, res: IResponse): Promise<Response<ILicenseKey[]>> {
+    let filter: any
+
+    if (req.query.filter?.length) {
+      filter = JSON.parse(decodeURIComponent(req.query.filter))
+    }
+
+    const sort = req.query.sort?.length ? JSON.parse(decodeURIComponent(req.query.sort)) : DEFAULT_SORT
+
+    if (req.user) {
+      filter = {...filter, user: req.user}
+    }
+
     try {
-      // TODO: add filter, pagination, limit, sort
-      const items = await this.service.find(req.query.filter)
+      const items = await this.service.find({filter, sort})
       return res.json(items)
     } catch (error) {
       logger.errorLog(req, error.message)

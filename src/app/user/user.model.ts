@@ -24,6 +24,8 @@ export const userAuthSchema: Joi.ObjectSchema<UserDto> = Joi.object({
 export const userCreateSchema: Joi.ObjectSchema<UserDto> = Joi.object({
   email: Joi.string().email().required(),
   firebaseId: Joi.string().required(),
+  firstname: Joi.string(),
+  surname: Joi.string(),
 })
 
 

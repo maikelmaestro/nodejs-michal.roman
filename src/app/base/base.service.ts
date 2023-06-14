@@ -15,8 +15,8 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     return await this.dataAccess.findOne(id)
   }
 
-  async find(options: any): Promise<T[]> {
-    return await this.dataAccess.find(options)
+  async find(query: {filter: any, sort: any}): Promise<T[]> {
+    return await this.dataAccess.find(query)
   }
 
   async findOne(id: string): Promise<T> {

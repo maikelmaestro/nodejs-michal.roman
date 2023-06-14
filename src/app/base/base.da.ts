@@ -10,9 +10,9 @@ export class BaseDa<T extends IBaseItem, DTO> {
     this.getDB()
   }
 
-  async find(options: any): Promise<T[]> {
+  async find(query: {filter: any, sort: any}): Promise<T[]> {
     try {
-      return await this.database.collection(this.collectionName).find().toArray() as T[]
+      return await this.database.collection(this.collectionName).find(query.filter).sort(query.sort).toArray() as T[]
     } catch (error) {
       throw new HttpException(error.status, 'Unable to find items')
     }

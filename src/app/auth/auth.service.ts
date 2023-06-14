@@ -11,15 +11,22 @@ export class AuthService {
 
 
   async signUp(payload: UserDto) {
-    console.log('signUp')
     const found = await this.userDa.findByEmail(payload.email)
 
     if (found) {
       throw new HttpException(400, 'User with this email already exists')
     }
-    const {uid}= await firebase.auth().createUser(payload)
 
-    const {id} = await this.userDa.createOne({email: payload.email, firebaseId: uid})
+    let uid: string
+    try {
+      const {uid: createdId}= await firebase.auth().createUser(payload)
+      uid = createdId
+    } catch (error) {
+      console.error(error)
+      throw new HttpException(400, 'User with this email already exists')
+    }
+
+    const {id} = await this.userDa.createOne({email: payload.email, firebaseId: uid, createdAt: new Date()})
 
     return await this.userDa.findOne(id)
   }

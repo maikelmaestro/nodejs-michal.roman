@@ -7,9 +7,7 @@ export interface IRequest extends Request {
 
 export interface IListRequest extends IRequest {
   query: {
-    page?: number|any
-    perPage?: number|any
-    sort?: any
     filter?: string
+    sort?: any
   }
 }

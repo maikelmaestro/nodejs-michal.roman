@@ -13,7 +13,6 @@ export class AuthController implements IBaseController {
   public router = express.Router()
   path: string = API_VERSION_PATH
   private service: AuthService = new AuthService()
-
   constructor() {
     this.initRouter()
   }
