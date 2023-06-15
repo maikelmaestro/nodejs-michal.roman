@@ -18,6 +18,7 @@ export interface SessionKeyDto extends BaseDto {
 export const sessionKeyCreateSchema: Joi.ObjectSchema<SessionKeyDto> = Joi.object({
   name: Joi.string().required(),
   key: Joi.string().required(),
+  sessionId: Joi.string().required(),
   expiration: Joi.date().required(),
   users: Joi.array().optional(),
 })
@@ -25,6 +26,7 @@ export const sessionKeyCreateSchema: Joi.ObjectSchema<SessionKeyDto> = Joi.objec
 export const sessionKeyUpdateSchema: Joi.ObjectSchema<SessionKeyDto> = Joi.object({
   name: Joi.string().optional(),
   key: Joi.string().optional(),
+  sessionId: Joi.string().optional(),
   expiration: Joi.date().optional(),
   users: Joi.array().optional(),
 })

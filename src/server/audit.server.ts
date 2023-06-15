@@ -9,6 +9,7 @@ import process from "process"
 import colors from 'colors'
 import {firebaseApp} from '../firebase'
 import {IBaseController} from '../app/base/base.controller'
+import {IListRequest, IRequest, IResponse} from '../app/shared/requests/requests.types'
 
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
@@ -24,6 +25,8 @@ export class AuditServer {
         this.app.use(helmet())
         this.app.use(serverMiddleware)
         this.app.use(locationMiddleware)
+        this.app.use(this.loggerMiddleware)
+
         firebaseApp()
         if (process.env.FORCE_HTTPS && process.env.FORCE_HTTPS === "true") {
             this.app.use(enforce.HTTPS({trustProtoHeader: true}))
@@ -59,6 +62,17 @@ export class AuditServer {
         controllers.forEach(controller => {
             this.app.use(controller.path, controller.router)
         })
+    }
+
+    private  loggerMiddleware(req: IRequest|IListRequest, res: IResponse, next) {
+      //TODO: add logger
+        console.log(`Incoming request: ${req.method} ${req.url}`)
+
+        res.on('finish', () => {
+            console.log(`Outgoing response: ${res.statusCode}`)
+        })
+
+        next()
     }
 }
 

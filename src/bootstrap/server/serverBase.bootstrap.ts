@@ -43,7 +43,7 @@ export class ServerBaseBootstrap {
    * @returns {express.Application}
    */
   protected initServer(): express.Application {
-    const port = process.env.PORT || 8080
+    const port = process.env.PORT || 3000
     const apiKeyService: ApiKeyService = ApiKeyService.getInstance()
     const licenseKeyService: LicenseKeyService = LicenseKeyService.getInstance()
     const sessionKeyService: SessionKeyService = SessionKeyService.getInstance()
