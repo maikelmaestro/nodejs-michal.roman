@@ -30,29 +30,16 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
   }
 
   async updateOne(id: string, payload: DTO): Promise<T> {
-    const _id = new ObjectId(id)
-    let foundItem: T
+    const _id: ObjectId = new ObjectId(id)
 
     if (!_id) {
       throw new HttpException(404, `Invalid id ${_id}`)
     }
 
-    try {
-      foundItem = await this.dataAccess.findOne(_id)
-    } catch (error) {
-      throw new HttpException(404,`Unable to find item with id ${_id}`)
-    }
-
     const body = {...payload}
     body.updatedAt = new Date()
-    body.createdAt = foundItem.createdAt
 
-    const {updated} = await this.dataAccess.updateOne(_id, body)
-    if (!updated) {
-      throw new HttpException(400, `Unable to update item with id ${_id}`)
-    }
-
-    return await this.dataAccess.findOne(_id)
+    return await this.dataAccess.updateOne(_id, body)
   }
 
   async deleteOne(id: string): Promise<{deleted: boolean}> {

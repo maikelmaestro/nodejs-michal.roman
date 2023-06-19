@@ -5,7 +5,6 @@
 import {IServerInstances} from '../../interfaces/IServerInstances'
 import {AuditServer} from '../../server/audit.server'
 import express from 'express'
-import {DefaultController} from '../../controllers/default.controller'
 import {DBConnections} from '../../services/databases/DBConnections'
 import {ApiKeyController} from '../../app/api-key/api-key.controller'
 import {LicenseKeyController} from '../../app/license-key/license-key.controller'
@@ -50,7 +49,6 @@ export class ServerBaseBootstrap {
     const userService: UserService = UserService.getInstance()
 
     this.server = new AuditServer(Number.parseInt(port.toString()), [
-        new DefaultController(),
         new ApiKeyController(apiKeyService),
         new LicenseKeyController(licenseKeyService),
         new SessionKeyController(sessionKeyService),

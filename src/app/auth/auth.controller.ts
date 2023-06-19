@@ -5,7 +5,6 @@ import {validateRequest} from '../../middlewares/validator.middleware'
 import {userAuthSchema} from '../user/user.model'
 import {AuthService} from './auth.service'
 import {Request, Response} from 'express'
-import {logger} from '../../logger/tslogger'
 import {API_VERSION_PATH} from '../shared/api.consts'
 import {IResponse} from '../shared/requests/requests.types'
 
@@ -31,10 +30,8 @@ export class AuthController implements IBaseController {
   async signUp(req: Request, res: IResponse) {
     try {
       const user = await this.service.signUp(req.body)
-      logger.infoLog(req)
       return res.json(user)
     } catch (error) {
-      logger.errorLog(req, error.message)
       return res.status(error.status || 400).json({ message: error.message})
     }
   }
@@ -42,10 +39,8 @@ export class AuthController implements IBaseController {
   async logout(req: Request, res: IResponse) {
     try {
       const user = await this.service.logout()
-      logger.infoLog(req)
       return res.json(user)
     } catch (error) {
-      logger.errorLog(req, error.message)
       return res.status(error.status || 400).json({ message: error.message})
     }
   }
