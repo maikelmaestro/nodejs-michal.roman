@@ -6,7 +6,7 @@ export const validateRequest = (schema) => {
 
         if (error) {
             logger.errorLog(req, error.details[0].message)
-            return res.status(400).json({error: error.details[0].message})
+            return res.status(400).json({message: error.details[0].message})
         }
         next()
     }
@@ -18,7 +18,7 @@ export const validateParams = (schema) => {
 
         if (error) {
             logger.errorLog(req, error.details[0].message)
-            return res.status(400).json({error: error.details[0].message})
+            return res.status(400).json({message: error.details[0].message})
         }
         next()
     }

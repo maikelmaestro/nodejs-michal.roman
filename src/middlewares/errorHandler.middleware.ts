@@ -5,7 +5,9 @@ import {logger} from "../logger/tslogger"
 
 export function errorHandlerMiddleware(error: any, request: express.Request, response: express.Response, next: NextFunction) {
     const message = error.message || 'Something went wrong'
+
     if (error instanceof HttpException) {
+
         const status = error?.status
 
         let payload = {
@@ -26,8 +28,7 @@ export function errorHandlerMiddleware(error: any, request: express.Request, res
             }
         }
 
-        logger.warn(error);
+        logger.warn(error)
         response.status(500).json(payload).send()
     }
-
 }
