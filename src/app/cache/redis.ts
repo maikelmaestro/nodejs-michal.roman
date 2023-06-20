@@ -10,7 +10,7 @@ export interface SetOptions {
 class RedisCache {
   expireInSeconds: number = 60 * 60
   client: ReturnType<typeof createClient>
-  url: string = `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`
+  url: string = `${process.env.REDIS_URL}:${process.env.REDIS_PORT}`
 
   constructor() {
     this.init()
@@ -19,7 +19,7 @@ class RedisCache {
   async init() {
     try {
       this.log(yellow(`Connecting to: ${this.url}`))
-      this.client = createClient()
+      this.client = createClient({url: this.url})
       this.client.on('connect', async () => {
         const now = new Date().toISOString()
         await this.client.set('connected', now)

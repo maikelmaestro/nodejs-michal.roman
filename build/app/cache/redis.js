@@ -7,13 +7,13 @@ require('dotenv').config();
 class RedisCache {
     constructor() {
         this.expireInSeconds = 60 * 60;
-        this.url = `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`;
+        this.url = `${process.env.REDIS_URL}:${process.env.REDIS_PORT}`;
         this.init();
     }
     async init() {
         try {
             this.log((0, colors_1.yellow)(`Connecting to: ${this.url}`));
-            this.client = (0, redis_1.createClient)();
+            this.client = (0, redis_1.createClient)({ url: this.url });
             this.client.on('connect', async () => {
                 const now = new Date().toISOString();
                 await this.client.set('connected', now);
