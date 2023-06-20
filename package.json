@@ -4,6 +4,8 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
+    "start:prod": "npm run serve",
+    "serve": "node build/index.js",
     "start": "tsc && node --max_old_space_size=200 /build/index.js",
     "dev": "nodemon -x ts-node src/index.ts",
     "build": "tsc"
