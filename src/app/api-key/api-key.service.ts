@@ -9,7 +9,7 @@ export class ApiKeyService extends BaseService<IApiKey, ApiKeyDto> {
     super(ApiKeyDa.getInstance())
   }
 
-  static getInstance() {
+  static getInstance(): ApiKeyService {
     if (!ApiKeyService.instance) {
       ApiKeyService.instance = new ApiKeyService()
     }

@@ -5,7 +5,6 @@
 import {IServerInstances} from '../../interfaces/IServerInstances'
 import {AuditServer} from '../../server/audit.server'
 import express from 'express'
-import {DBConnections} from '../../services/databases/DBConnections'
 import {ApiKeyController} from '../../app/api-key/api-key.controller'
 import {LicenseKeyController} from '../../app/license-key/license-key.controller'
 import {AuthController} from '../../app/auth/auth.controller'
@@ -57,7 +56,7 @@ export class ServerBaseBootstrap {
       ]
     )
 
-    const db = new DBConnections()
+    // const db = new DBConnections()
     this.server.listen()
     return this.server.app
   }

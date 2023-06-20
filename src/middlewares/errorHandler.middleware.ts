@@ -1,5 +1,5 @@
-import {HttpException} from "../exceptions/HttpException"
-import express, {NextFunction} from "express"
+import {HttpException} from '../exceptions/HttpException'
+import express, {NextFunction} from 'express'
 import {logger} from "../logger/tslogger"
 
 
@@ -8,7 +8,7 @@ export function errorHandlerMiddleware(error: any, request: express.Request, res
 
     if (error instanceof HttpException) {
 
-        const status = error?.status
+        const status: number = error?.status
 
         let payload = {
             error: {
@@ -31,4 +31,6 @@ export function errorHandlerMiddleware(error: any, request: express.Request, res
         logger.warn(error)
         response.status(500).json(payload).send()
     }
+
+    next()
 }

@@ -2,7 +2,7 @@ import {IListRequest, IRequest, IResponse} from '../app/shared/requests/requests
 import colors from 'colors'
 
 export function loggerMiddleware(req: IRequest|IListRequest, res: IResponse, next) {
-  const CONST_NOW = new Date()
+  const CONST_NOW: Date = new Date()
 
   res.on('finish', () => {
     if (res.statusCode >= 400) {

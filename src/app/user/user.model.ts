@@ -28,8 +28,7 @@ export const userCreateSchema: Joi.ObjectSchema<UserDto> = Joi.object({
   surname: Joi.string(),
 })
 
-
-export const userUpdateSchema = Joi.object({
+export const userUpdateSchema: Joi.ObjectSchema<UserDto> = Joi.object({
   firstname: Joi.string().optional(),
   surname: Joi.string().optional(),
 })

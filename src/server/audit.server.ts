@@ -28,6 +28,7 @@ export class AuditServer {
         this.app.use(loggerMiddleware)
 
         firebaseApp()
+
         if (process.env.FORCE_HTTPS && process.env.FORCE_HTTPS === "true") {
             this.app.use(enforce.HTTPS({trustProtoHeader: true}))
         }
@@ -46,7 +47,7 @@ export class AuditServer {
     }
 
     showLocation() {
-        const location = process.env.LOCATION
+        const location: string = process.env.LOCATION
         if (location) {
             logger.info('Location: ', location)
         }

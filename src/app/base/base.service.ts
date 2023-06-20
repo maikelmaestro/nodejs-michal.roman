@@ -54,6 +54,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     if (!deleted) {
       throw new HttpException(400, `Unable to delete item with id ${_id}`)
     }
+
     return {deleted}
   }
 }

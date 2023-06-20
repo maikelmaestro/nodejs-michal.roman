@@ -9,7 +9,7 @@ export class UserService extends BaseService<IUser, UserDto> {
     super(UserDa.getInstance())
   }
 
-  static getInstance() {
+  static getInstance(): UserService {
     if (!UserService.instance) {
       UserService.instance = new UserService()
     }

@@ -4,9 +4,8 @@ import {IBaseController} from '../base/base.controller'
 import {validateRequest} from '../../middlewares/validator.middleware'
 import {userAuthSchema} from '../user/user.model'
 import {AuthService} from './auth.service'
-import {Request, Response} from 'express'
 import {API_VERSION_PATH} from '../shared/api.consts'
-import {IResponse} from '../shared/requests/requests.types'
+import {IRequest, IResponse} from '../shared/requests/requests.types'
 
 export class AuthController implements IBaseController {
   public router = express.Router()
@@ -27,7 +26,7 @@ export class AuthController implements IBaseController {
     ], this.call('logout'))
   }
 
-  async signUp(req: Request, res: IResponse) {
+  async signUp(req: IRequest, res: IResponse) {
     try {
       const user = await this.service.signUp(req.body)
       return res.json(user)
@@ -36,7 +35,7 @@ export class AuthController implements IBaseController {
     }
   }
 
-  async logout(req: Request, res: IResponse) {
+  async logout(req: IRequest, res: IResponse) {
     try {
       const user = await this.service.logout()
       return res.json(user)

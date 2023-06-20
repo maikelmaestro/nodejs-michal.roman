@@ -1,4 +1,4 @@
-import {config} from "../config";
+import {config} from '../config'
 
 export class ConfigFactory {
 
@@ -6,11 +6,11 @@ export class ConfigFactory {
 
     public static getConfig(){
 
-        const type = process.env.NODE_ENV;
+        const type = process.env.NODE_ENV
 
         switch (type) {
             default:
-                return config();
+                return config()
         }
     }
 }

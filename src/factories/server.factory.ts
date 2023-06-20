@@ -1,4 +1,4 @@
-import {ServerCloudBootstrap} from '../bootstrap/server/serverCloud.bootstrap';
+import {ServerCloudBootstrap} from '../bootstrap/server/serverCloud.bootstrap'
 
 export class ServerFactory {
     /**
@@ -8,11 +8,11 @@ export class ServerFactory {
      */
     public static getServerInstance() {
 
-        const type = process.env.NODE_ENV;
+        const type = process.env.NODE_ENV
 
         switch (type) {
             default:
-                return new ServerCloudBootstrap();
+                return new ServerCloudBootstrap()
         }
     }
 }

@@ -1,16 +1,16 @@
 import {createClient} from 'redis'
 import {dim, green, red, yellow} from 'colors'
+require('dotenv').config()
 
 export interface SetOptions {
   // in seconds
   EX: number
 }
 
-
 class RedisCache {
-  expireInSeconds: number = 24 * 60 * 60
+  expireInSeconds: number = 60 * 60
   client: ReturnType<typeof createClient>
-  url = `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`
+  url: string = `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`
 
   constructor() {
     this.init()
@@ -38,39 +38,39 @@ class RedisCache {
     return this.client
   }
 
-  async get(key: string) {
+  async get(key: string): Promise<string> {
     return await this.client.get(key)
   }
 
-  async getJSON(key: string) {
-    const entity = await this.client.get(key)
+  async getJSON(key: string): Promise<any> {
+    const entity: string = await this.client.get(key)
     return JSON.parse(entity)
   }
 
-  async set(key: string, value: any, options?: SetOptions) {
+  async set(key: string, value: any, options?: SetOptions): Promise<string> {
     return await this.client.set(key, value, {EX: options?.EX || this.expireInSeconds})
   }
 
-  async setJSON(key: string, value: any, options?: SetOptions) {
+  async setJSON(key: string, value: any, options?: SetOptions): Promise<string> {
     return await this.client.set(key, JSON.stringify(value), {EX: options?.EX || this.expireInSeconds})
   }
 
-  async has(key: string) {
+  async has(key: string): Promise<number> {
     return await this.client.exists(key)
   }
 
-  async del(key: string) {
+  async del(key: string): Promise<number> {
     return await this.client.del(key)
   }
 
-  async reset() {
+  async reset(): Promise<string> {
     this.log(dim(`Flushed all`))
     return await this.client.flushAll()
   }
 
-  log(message: string) {
+  log(message: string): void {
     console.log(`${red('Redis:')} ${message}`)
   }
 }
 
-export const redisCache = new RedisCache()
+export const redisCache: RedisCache = new RedisCache()

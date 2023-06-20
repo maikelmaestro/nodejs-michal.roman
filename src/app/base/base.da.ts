@@ -14,13 +14,13 @@ export class BaseDa<T extends IBaseItem, DTO> {
 
   async find(query: {filter: any, sort: any}): Promise<T[]> {
     // TODO: Fetch from cache fix if filter used
-    const cacheData = await redisCache.getJSON(this.cacheKey)
+    // const cacheData = await redisCache.getJSON(this.cacheKey)
 
-    if (cacheData) return cacheData
+    // if (cacheData) return cacheData
 
     try {
       const data = await this.database.collection(this.collectionName).find(query.filter).sort(query.sort).toArray() as T[]
-      await redisCache.setJSON(this.cacheKey, data)
+      // await redisCache.setJSON(this.cacheKey, data)
       return data
     } catch (error) {
       throw new HttpException(error.status, `Unable to find ${this.collectionName} items`)
@@ -49,7 +49,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
   async createOne(payload: DTO): Promise<{id: ObjectId}> {
     try {
       const created = await this.database.collection(this.collectionName).insertOne(payload)
-      await redisCache.del(`${this.cacheKey}`)
+      // await redisCache.del(`${this.cacheKey}`)
       return {id: created.insertedId}
     } catch (error) {
       throw new HttpException(error.status, `Unable to create ${this.collectionName}`)
@@ -62,7 +62,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
         {_id: id}, {$set: payload}, {returnDocument: 'after'})
 
       await redisCache.setJSON(`${this.cacheKey}:${id}`, item.value)
-      await redisCache.del(`${this.cacheKey}`)
+      // await redisCache.del(`${this.cacheKey}`)
       return item.value as T
     } catch (error) {
       throw new HttpException(error.status, `Unable to update ${this.collectionName} with id ${id}`)
@@ -78,12 +78,13 @@ export class BaseDa<T extends IBaseItem, DTO> {
       }
       await redisCache.del(`${this.cacheKey}:${id}`)
 
-      const fromCache = await redisCache.getJSON(this.cacheKey)
+      // const fromCache = await redisCache.getJSON(this.cacheKey)
+      //
+      // if (fromCache) {
+      //   const filtered = fromCache.filter(item => item._id !== id.toString())
+      //   await redisCache.setJSON(this.cacheKey, filtered)
+      // }
 
-      if (fromCache) {
-        const filtered = fromCache.filter(item => item._id !== id.toString())
-        await redisCache.setJSON(this.cacheKey, filtered)
-      }
       return {deleted: true}
     } catch (error) {
       throw new HttpException(error.status, `Unable to delete ${this.collectionName} with id ${id}`)

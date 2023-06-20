@@ -9,7 +9,7 @@ export class LicenseKeyService extends BaseService<ILicenseKey, LicenseKeyDto> {
     super(LicenseKeyDa.getInstance())
   }
 
-  static getInstance() {
+  static getInstance(): LicenseKeyService {
     if (!LicenseKeyService.instance) {
       LicenseKeyService.instance = new LicenseKeyService()
     }

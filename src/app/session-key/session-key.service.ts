@@ -9,7 +9,7 @@ export class SessionKeyService extends BaseService<ISessionKey, SessionKeyDto> {
     super(SessionKeyDa.getInstance())
   }
 
-  static getInstance() {
+  static getInstance(): SessionKeyService {
     if (!SessionKeyService.instance) {
       SessionKeyService.instance = new SessionKeyService()
     }

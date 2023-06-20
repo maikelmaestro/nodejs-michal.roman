@@ -1,4 +1,4 @@
-export let config;
+export let config
 
 config = function () {
     let node_env = process.env.NODE_ENV || 'localhost'; // 'prod' OR 'dev'
@@ -6,11 +6,10 @@ config = function () {
         node_env = 'prod';
     }
 
-    return configuration[node_env];
+    return configuration[node_env]
 }
 
-let configuration;
-configuration = {
+let configuration = {
     prod: {
         mongoDbUri: 'mongodb+srv://DecisionUser248:advREX2kXa4JaBQD@decisioncluster.fcpws.mongodb.net/Decision?retryWrites=true&w=majority&readPreference=nearest',
         mongoDatabase: 'Decision',

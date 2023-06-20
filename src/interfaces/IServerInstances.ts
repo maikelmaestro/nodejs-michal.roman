@@ -1,5 +1,5 @@
-import express from 'express';
+import express from 'express'
 
 export interface IServerInstances {
-    app: express.Application;
+    app: express.Application
 }
