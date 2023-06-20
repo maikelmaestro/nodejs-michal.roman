@@ -13,7 +13,7 @@ config = function () {
 
 let configuration = {
     prod: {
-        mongoDbUri: 'mongodb+srv://DecisionUser248:advREX2kXa4JaBQD@decisioncluster.fcpws.mongodb.net/Decision?retryWrites=true&w=majority&readPreference=nearest',
+        mongoDbUri: 'mongodb+srv://admin:Qwerty123@cluster0.hqmuck9.mongodb.net/key-storage?retryWrites=true&w=majority',
         mongoDatabase: 'Decision',
 
         landingPageUrl: 'https://decisionrules.io/',
