@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "start": "tsc && node --max_old_space_size=200 /build/index.js",
+    "start": "npx tsc && node --max_old_space_size=200 /build/index.js",
     "dev": "nodemon -x ts-node src/index.ts",
     "build": "tsc"
   },
