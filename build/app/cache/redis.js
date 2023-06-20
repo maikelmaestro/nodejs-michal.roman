@@ -7,7 +7,7 @@ require('dotenv').config();
 class RedisCache {
     constructor() {
         this.expireInSeconds = 60 * 60;
-        this.url = `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`;
+        this.url = 'redis://red-ci8m52tiuie0h322andg:6379';
         this.init();
     }
     async init() {
