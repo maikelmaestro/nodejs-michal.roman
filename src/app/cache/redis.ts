@@ -10,7 +10,7 @@ export interface SetOptions {
 class RedisCache {
   expireInSeconds: number = 60 * 60
   client: ReturnType<typeof createClient>
-  url: string = 'redis://red-ci8m52tiuie0h322andg:6379'
+  url: string = `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`
 
   constructor() {
     this.init()
