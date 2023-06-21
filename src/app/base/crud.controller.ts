@@ -1,14 +1,13 @@
 import {IListRequest, IRequest, IResponse} from '../shared/requests/requests.types'
 import {Response} from 'express'
 import {DEFAULT_SORT} from '../shared/api.consts'
-import {IUser} from '../user/user.model'
 import {BaseService} from './base.service'
 import {BaseDto, IBaseItem} from './base.model'
 
 export class CrudController<T> {
   constructor(protected service: BaseService<IBaseItem, BaseDto>) {}
 
-  async createOneWithoutUserFilter(req: IRequest, res: IResponse): Promise<Response<IUser>> {
+  async createOneWithoutUserFilter(req: IRequest, res: IResponse): Promise<Response<T>> {
     try {
       const created: IBaseItem = await this.service.createOne(req.body)
       return res.json(created)
