@@ -50,8 +50,8 @@ class AuthController {
     }
     async logout(req, res) {
         try {
-            const user = await this.service.logout();
-            return res.json(user);
+            const { logout } = await this.service.logout();
+            return res.json(logout);
         }
         catch (error) {
             return res.status(error.status || 400).json({ message: error.message });

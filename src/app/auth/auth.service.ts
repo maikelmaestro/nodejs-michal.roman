@@ -1,7 +1,7 @@
 import {UserDa} from '../user/user.da'
 import {HttpException} from '../../exceptions/HttpException'
 import firebase from 'firebase-admin'
-import {UserDto} from '../user/user.model'
+import {IUser, UserDto} from '../user/user.model'
 
 export class AuthService {
   private userDa: UserDa
@@ -10,7 +10,7 @@ export class AuthService {
     this.userDa = UserDa.getInstance()
   }
 
-  async signUp(payload: UserDto) {
+  async signUp(payload: UserDto): Promise<IUser> {
     const found = await this.userDa.findByEmail(payload.email)
 
     if (found) {
@@ -31,7 +31,8 @@ export class AuthService {
     return await this.userDa.findOne(id)
   }
 
-  async logout() {
+  async logout(): Promise<{logout: boolean}> {
     console.log('logout')
+    return {logout: true}
   }
 }

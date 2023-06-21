@@ -30,6 +30,7 @@ class AuthService {
     }
     async logout() {
         console.log('logout');
+        return { logout: true };
     }
 }
 exports.AuthService = AuthService;

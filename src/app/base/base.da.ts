@@ -1,4 +1,4 @@
-import {Db, ObjectId} from 'mongodb'
+import {Db, InsertOneResult, ObjectId} from 'mongodb'
 import {DBConnections} from '../../services/databases/DBConnections'
 import {IBaseItem} from './base.model'
 import {HttpException} from '../../exceptions/HttpException'
@@ -20,7 +20,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
     if (cacheData) return cacheData
 
     try {
-      const data = await this.database.collection(this.collectionName).find(query.filter).sort(query.sort).toArray() as T[]
+      const data: T[] = await this.database.collection(this.collectionName).find(query.filter).sort(query.sort).toArray() as T[]
       await redisCache.setJSON(cacheKey, data)
       return data
     } catch (error) {
@@ -29,7 +29,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
   }
 
   async findOne(id: ObjectId): Promise<T> {
-    const cacheKey = generateRedisKey(this.cachePrefix)
+    const cacheKey: string = generateRedisKey(this.cachePrefix)
 
     let found: T = await redisCache.getJSON(`${cacheKey}:${id}`)
 
@@ -50,9 +50,10 @@ export class BaseDa<T extends IBaseItem, DTO> {
   }
 
   async createOne(payload: DTO): Promise<{id: ObjectId}> {
+    // TODO: Find all conditions and add to them
 
     try {
-      const created = await this.database.collection(this.collectionName).insertOne(payload)
+      const created: InsertOneResult<Document> = await this.database.collection(this.collectionName).insertOne(payload)
       await redisCache.reset()
       return {id: created.insertedId}
     } catch (error) {
@@ -67,6 +68,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
       const item = await this.database.collection(this.collectionName).findOneAndUpdate(
         {_id: id}, {$set: payload}, {returnDocument: 'after'})
 
+      // TODO: Find item in all keys and update them
       await redisCache.reset()
       await redisCache.setJSON(`${cacheKey}:${id}`, item.value)
 
@@ -77,7 +79,7 @@ export class BaseDa<T extends IBaseItem, DTO> {
   }
 
   async deleteOne(id: ObjectId): Promise<{deleted: boolean}> {
-    const cacheKey: string = generateRedisKey(this.cachePrefix)
+    // const cacheKey: string = generateRedisKey(this.cachePrefix)
 
     try {
       const deleted = await this.database.collection(this.collectionName).deleteOne({_id: id})
@@ -87,6 +89,8 @@ export class BaseDa<T extends IBaseItem, DTO> {
       }
 
       await redisCache.reset()
+
+      // TODO: Find item in all keys and delete from them
 
       // await redisCache.del(`${cacheKey}:${id}`)
 

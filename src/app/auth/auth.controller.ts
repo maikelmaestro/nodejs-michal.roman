@@ -6,11 +6,13 @@ import {userAuthSchema} from '../user/user.model'
 import {AuthService} from './auth.service'
 import {API_VERSION_PATH} from '../shared/api.consts'
 import {IRequest, IResponse} from '../shared/requests/requests.types'
+import {Router} from 'express'
 
 export class AuthController implements IBaseController {
-  public router = express.Router()
+  public router: Router = express.Router()
   path: string = API_VERSION_PATH
   private service: AuthService = new AuthService()
+
   constructor() {
     this.initRouter()
   }
@@ -22,8 +24,7 @@ export class AuthController implements IBaseController {
       validateRequest(userAuthSchema)
     ], this.call('signUp'))
 
-    this.router.post(`/logout`, [
-    ], this.call('logout'))
+    this.router.post(`/logout`, [], this.call('logout'))
   }
 
   async signUp(req: IRequest, res: IResponse) {
@@ -31,16 +32,16 @@ export class AuthController implements IBaseController {
       const user = await this.service.signUp(req.body)
       return res.json(user)
     } catch (error) {
-      return res.status(error.status || 400).json({ message: error.message})
+      return res.status(error.status || 400).json({message: error.message})
     }
   }
 
   async logout(req: IRequest, res: IResponse) {
     try {
-      const user = await this.service.logout()
-      return res.json(user)
+      const {logout} = await this.service.logout()
+      return res.json(logout)
     } catch (error) {
-      return res.status(error.status || 400).json({ message: error.message})
+      return res.status(error.status || 400).json({message: error.message})
     }
   }
 

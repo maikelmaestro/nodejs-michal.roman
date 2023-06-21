@@ -43,6 +43,7 @@ class BaseDa {
         return found;
     }
     async createOne(payload) {
+        // TODO: Find all conditions and add to them
         try {
             const created = await this.database.collection(this.collectionName).insertOne(payload);
             await redis_1.redisCache.reset();
@@ -56,6 +57,7 @@ class BaseDa {
         const cacheKey = (0, generateRedisKey_1.generateRedisKey)(this.cachePrefix);
         try {
             const item = await this.database.collection(this.collectionName).findOneAndUpdate({ _id: id }, { $set: payload }, { returnDocument: 'after' });
+            // TODO: Find item in all keys and update them
             await redis_1.redisCache.reset();
             await redis_1.redisCache.setJSON(`${cacheKey}:${id}`, item.value);
             return item.value;
@@ -65,13 +67,14 @@ class BaseDa {
         }
     }
     async deleteOne(id) {
-        const cacheKey = (0, generateRedisKey_1.generateRedisKey)(this.cachePrefix);
+        // const cacheKey: string = generateRedisKey(this.cachePrefix)
         try {
             const deleted = await this.database.collection(this.collectionName).deleteOne({ _id: id });
             if (deleted.deletedCount === 0) {
                 return { deleted: false };
             }
             await redis_1.redisCache.reset();
+            // TODO: Find item in all keys and delete from them
             // await redisCache.del(`${cacheKey}:${id}`)
             // const fromCache = await redisCache.getJSON(cacheKey)
             //

@@ -10,7 +10,7 @@ export class CrudController<T> {
 
   async createOneWithoutUserFilter(req: IRequest, res: IResponse): Promise<Response<IUser>> {
     try {
-      const created = await this.service.createOne(req.body)
+      const created: IBaseItem = await this.service.createOne(req.body)
       return res.json(created)
     } catch (error) {
       return res.status(error.status).json({message: error.message})
@@ -22,7 +22,7 @@ export class CrudController<T> {
     body.user = req.user as string || undefined
 
     try {
-      const created = await this.service.createOne(body)
+      const created: IBaseItem = await this.service.createOne(body)
       return res.json(created)
     } catch (error) {
       return res.status(error.status).json({message: error.message})
@@ -60,7 +60,7 @@ export class CrudController<T> {
     const sort = req.query.sort?.length ? JSON.parse(decodeURIComponent(req.query.sort)) : DEFAULT_SORT
 
     try {
-      const items = await this.service.find({filter, sort})
+      const items: IBaseItem[] = await this.service.find({filter, sort})
       return res.json(items)
     } catch (error) {
       return res.status(error.status || 400).json({message: error.message})
@@ -69,7 +69,7 @@ export class CrudController<T> {
 
   async findOne(req: IRequest, res: IResponse): Promise<Response<T>> {
     try {
-      const item = await this.service.findOne(req.params._id)
+      const item: IBaseItem = await this.service.findOne(req.params._id)
       return res.json(item)
     } catch (error) {
       return res.status(error.status || 400).json({message: error.message})
@@ -78,7 +78,7 @@ export class CrudController<T> {
 
   async updateOne(req: IRequest, res: IResponse): Promise<Response<T>> {
     try {
-      const item = await this.service.updateOne(req.params._id, req.body)
+      const item: IBaseItem = await this.service.updateOne(req.params._id, req.body)
       return res.json(item)
     } catch (error) {
       return res.status(error.status || 400).json({message: error.message})
@@ -87,7 +87,7 @@ export class CrudController<T> {
 
   async deleteOne(req: IRequest, res: IResponse): Promise<Response> {
     try {
-      const deleted = await this.service.deleteOne(req.params._id)
+      const deleted: {deleted: boolean} = await this.service.deleteOne(req.params._id)
       return res.json(deleted)
     } catch (error) {
       return res.status(error.status || 400).json({message: error.message})

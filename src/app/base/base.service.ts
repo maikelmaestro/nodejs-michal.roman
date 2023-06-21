@@ -8,7 +8,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
   constructor(protected dataAccess: BaseDa<T, DTO>) {}
 
   async createOne(payload: DTO): Promise<T> {
-    const body = {...payload}
+    const body: DTO = {...payload}
     body.createdAt = new Date()
 
     const {id} = await this.dataAccess.createOne(body)
@@ -23,7 +23,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     const _id: ObjectId = new ObjectId(id)
 
     if (!_id) {
-      throw new HttpException(404,`Invalid id ${_id}`)
+      throw new HttpException(404, `Invalid id ${_id}`)
     }
 
     return await this.dataAccess.findOne(_id)
@@ -36,7 +36,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
       throw new HttpException(404, `Invalid id ${_id}`)
     }
 
-    const body = {...payload}
+    const body: DTO = {...payload}
     body.updatedAt = new Date()
 
     return await this.dataAccess.updateOne(_id, body)
@@ -46,7 +46,7 @@ export class BaseService<T extends IBaseItem, DTO extends BaseDto> {
     const _id = new ObjectId(id)
 
     if (!_id) {
-      throw new HttpException(404,`Invalid id ${_id}`)
+      throw new HttpException(404, `Invalid id ${_id}`)
     }
 
     const {deleted} = await this.dataAccess.deleteOne(_id)
