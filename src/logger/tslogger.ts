@@ -1,5 +1,6 @@
 import colors from 'colors'
 import {checkRouteMethods} from '../app/utils/checkRouteMethods'
+import moment from 'moment'
 
 class DRLogger {
 
@@ -11,13 +12,13 @@ class DRLogger {
   public warn = console.warn
   public error = console.error
   public fatal = console.error
-  private now = new Date()
+  private now = moment().format('DD.MM.YYYY HH:mm:ss')
 
   infoLog = (req) => {
     const {model, method} = checkRouteMethods(req)
     console.log(
+      colors.dim(this.now),
       colors.cyan('[INFO]'),
-      this.now,
       'Endpoint:' + colors.cyan(model),
       'Method:' + colors.cyan(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
@@ -26,8 +27,8 @@ class DRLogger {
   successLog = (req) => {
     const {model, method} = checkRouteMethods(req)
     console.log(
+      colors.dim(this.now),
       colors.green('[SUCCESS]'),
-      this.now,
       'Endpoint:' + colors.green(model),
       'Method:' + colors.green(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
@@ -46,8 +47,8 @@ class DRLogger {
   errorLog = (req, message?) => {
     const {model, method} = checkRouteMethods(req)
     console.error(
+      colors.dim(this.now),
       colors.red('[ERROR]'),
-      this.now,
       'Endpoint:' + colors.red(model),
       'Method:' + colors.red(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body),
@@ -57,8 +58,8 @@ class DRLogger {
   fatalLog = (req) => {
     const {model, method} = checkRouteMethods(req)
     console.error(
+      colors.dim(this.now),
       colors.red('[FATAL]'),
-      this.now,
       'Endpoint:' + colors.red(model),
       'Method:' + colors.red(method.toUpperCase()),
       'Body:' + JSON.stringify(req.body))
